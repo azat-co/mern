@@ -1,0 +1,30 @@
+version: '2'
+services:
+
+  mongo:
+    image: mongo
+    command: mongod --smallfiles
+    networks:
+      - all
+
+  web:
+    image: node:boron
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh -c 'npm install; npm start'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    # links:
+      # - mongo
+    networks:
+      - all
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/passbook-offers"
+
+
+
+networks:
+  all:
